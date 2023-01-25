@@ -160,8 +160,10 @@ def load_tobase(text):
         session.add(Vacancy(item[0]))
         vac_id = session.query(Vacancy).filter(Vacancy.name == f'{item[0]}').first().id
         session.add(Itogi(vac_id, region_id, firma_id, zarplata_id, link_id))
-        session.commit()
-        vacancy_list.append(link_id)
+        # session.query(Itogi).order_by(Itogi.id)[-1]
+        # session.commit()
+        tmp=session.query(Itogi).order_by(Itogi.id)[-1].id
+        vacancy_list.append(tmp)
     session.commit()
     return get_data(vacancy_list)
 
@@ -172,7 +174,7 @@ def get_data(vacancy_list):
         tmp = select([Itogi.id, Vacancy.name, Region.name, Firma.name, Zarplata.name, Link.name]).where(
             Itogi.vac_id == Vacancy.id,
             Itogi.link_id == Link.id, Itogi.zarplata_id == Zarplata.id, Itogi.vac_id == Vacancy.id,
-            Itogi.firma_id == Firma.id, Itogi.region_id == Region.id, Itogi.link_id==vac)
+            Itogi.firma_id == Firma.id, Itogi.region_id == Region.id, Itogi.id==vac)
         result = engine.execute(tmp)
         for res in result:
             print(res)
@@ -181,8 +183,8 @@ def get_data(vacancy_list):
             # print(res)
 
 
-text = 'Повар'
-print(load_tobase(text))
+text = 'Хирург'
+load_tobase(text)
 # get_data()
 
 # association_table.insert(self=['vac_id', 'region_id', 'firma_id', 'zarplata_id', 'link_id'], values=[1, 2, 3, 4, 5])
