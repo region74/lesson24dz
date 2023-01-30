@@ -162,25 +162,25 @@ def load_tobase(text):
         session.add(Itogi(vac_id, region_id, firma_id, zarplata_id, link_id))
         # session.query(Itogi).order_by(Itogi.id)[-1]
         # session.commit()
-        tmp=session.query(Itogi).order_by(Itogi.id)[-1].id
+        tmp = session.query(Itogi).order_by(Itogi.id)[-1].id
         vacancy_list.append(tmp)
     session.commit()
     return get_data(vacancy_list)
 
 
 def get_data(vacancy_list):
-    data_set=[]
+    data_set = []
     for vac in vacancy_list:
         tmp = select([Itogi.id, Vacancy.name, Region.name, Firma.name, Zarplata.name, Link.name]).where(
             Itogi.vac_id == Vacancy.id,
             Itogi.link_id == Link.id, Itogi.zarplata_id == Zarplata.id, Itogi.vac_id == Vacancy.id,
-            Itogi.firma_id == Firma.id, Itogi.region_id == Region.id, Itogi.id==vac)
+            Itogi.firma_id == Firma.id, Itogi.region_id == Region.id, Itogi.id == vac)
         result = engine.execute(tmp)
         for res in result:
             print(res)
             data_set.append(res)
     return data_set
-            # print(res)
+    # print(res)
 
 
 text = 'Хирург'
